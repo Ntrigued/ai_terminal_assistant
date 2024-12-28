@@ -1,4 +1,4 @@
-**work-in-progess**
+**work-in-progress**
 
 # AI Terminal Assistant
 
