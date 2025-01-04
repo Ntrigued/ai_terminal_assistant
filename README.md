@@ -14,7 +14,7 @@ The script will start in "Standard Mode", which uses the <code>gpt-4o-mini</code
 * **use gemini** or **g**: Switch to the <code>gemini-1.5.-flash</code> model
 * **think cheap** or **c**: Switch to the <code>gpt-4o-mini</code> model
 * **think hard** or **x**: Switch to the <code>gpt-4o</code> model
-* **think super hard** or **e**: Switch to the following: each user message is first passed to the <code>o1-mini</code> model with a special prompt (telling it to create a plan to fulfill the request). This <code>o1-mini</code> message is then passed to the <code>gpt-4o</code> model with a special prompt telling it to follow the given plan.
+* **think super hard** or **e**: Switch to the following: each user message is first passed to the <code>o1-mini</code> model with a special prompt (telling it to create a plan to fulfill the request). This <code>o1-mini</code> message is then passed to the previously selected model with a special prompt telling it to follow the given plan.
 
 
 ## Conversation Example 

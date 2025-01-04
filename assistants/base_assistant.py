@@ -27,7 +27,7 @@ class BaseAssistant(AbstractAssistant):
     if user_query.lower() == 'exit assistant':
        sys.exit(0)
     elif user_query.lower() == 'new convo':
-       self.current_convo = Conversation(initial_messages=BASE_PROMPT(), model='gpt-4o-mini')
+       self.current_convo = Conversation(initial_messages=BASE_PROMPT(), model=self.current_convo.model)
        print(f"{self.mode} Assistant: conversation was reset")
     elif user_query.lower() == 'g' or user_query.lower() == 'use gemini':
       self.mode = "Gemini"
@@ -38,23 +38,23 @@ class BaseAssistant(AbstractAssistant):
        self.current_convo.model = 'gpt-4o'
        print(f"{self.mode} Assistant: Activating genius mode!")
     elif user_query.lower() == 'e' or user_query.lower() == 'think super hard':
-       self.mode = "Einstein"
-       self.current_convo.model = 'gpt-4o'
+       self.mode = f"Einstein - {self.current_convo.model}"
        print(f"{self.mode} Assistant: Activating Einstein mode!")
     elif user_query.lower() == 'c' or user_query.lower() == "think cheap":
        self.mode = "Standard"
        self.current_convo.model = 'gpt-4o-mini'
        print(f"{self.mode} Assistant: Brain size shrinking :(")
     else:
-      if self.mode == 'Einstein':
+      if self.mode.startswith('Einstein'):
+         model_save = self.current_convo.model
          self.current_convo.model = 'o1-mini'
          self.current_convo.messages[0]['role'] = 'user'
 
-         assistant_response = self._send_message(role="user", content="Write a plan for yourself (as the AI assistant who only has access to the terminal "+
+         assistant_response = self._send_user_message(content="Write a plan for yourself (as the AI assistant who only has access to the terminal "+
                                                   "commands I've told you about) to solve the following task or query. THE PLAN NEEDS TO SOLVE IT EXACTLY AS DEFINED, DON'T "+
                                                   "ADD ANY IMPROVEMENTS OR OPTIONAL STEPS:\n\n" + user_query)
          print(f"o1-mini plan: {assistant_response}")
-         self.current_convo.model = 'gpt-4o'
+         self.current_convo.model = model_save
          self.current_convo.messages[0]['role'] = 'system'
          self._respond_to_query("Now follow the plan you've created.")
       else:
@@ -68,17 +68,13 @@ class BaseAssistant(AbstractAssistant):
         command = assistant_response[resp_lower.find('<command>')+len('<command>'):resp_lower.find('</command>')]
         chain_of_thought = assistant_response.replace(f'<command>{command}</command>', '')
         print(f'Chain of Thought: {chain_of_thought}')
-        if command.startswith('cd'):
-          new_dir = command.replace('cd', '').strip()
-          os.chdir(new_dir)
-        if 'code_assistant' in command:
-          print(f"command: {command}")
-          CodeAssistant(chain_of_thought).interaction_loop()
-          assistant_response = self._send_user_message(content="The coding assistant has handled your request! Continue as if the task is completed (and don't reference this message).")
-        else:
-          command_output = self._command(command)
-          #print(f'Command Output:\n{command_output}')
-          assistant_response = self._send_user_message(content=command_output)["content"]
+        #if 'code_assistant' in command:
+        #  print(f"command: {command}")
+        #  CodeAssistant(chain_of_thought).interaction_loop()
+        #  assistant_response = self._send_user_message(content="The coding assistant has handled your request! Continue as if the task is completed (and don't reference this message).")
+        #else:
+        command_output = self._command(command)
+        assistant_response = self._send_user_message(content=command_output)["content"]
       else:
         print(f'{self.mode} Assistant: {assistant_response}')
         return True
