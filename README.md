@@ -5,6 +5,7 @@
 A little project where I try to create an AI assistant that runs in the terminal and can gather info / perform actions on my behalf by executing shell commands.
 
 Currently, only uses OpenAI models: GPT-4o, GPT-4o-mini, o1-mini. Gemini-1.5-flash was **just** also added but is basically unusable.
+The script will start in "Standard Mode", which uses the <code>gpt-4o-mini</code> model.
 
 ### Prompt Commands:
 **Enter these at the user prompt to run the commands**
