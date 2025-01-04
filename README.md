@@ -4,7 +4,16 @@
 
 A little project where I try to create an AI assistant that runs in the terminal and can gather info / perform actions on my behalf by executing shell commands.
 
-Currently, only uses OpenAI models: GPT-4o, GPT-4o-mini, o1-mini.
+Currently, only uses OpenAI models: GPT-4o, GPT-4o-mini, o1-mini. Gemini-1.5-flash was **just** also added but is basically unusable.
+
+### Prompt Commands:
+**Enter these at the user prompt to run the commands**
+* **exit assistant**: Exit the program
+* **new convo**: Erase all conversation history, starting over with just the initial prompt messages that all conversations start with
+* **use gemini** or **g**: Switch to the <code>gemini-1.5.-flash</code> model
+* **think cheap** or **c**: Switch to the <code>gpt-4o-mini</code> model
+* **think hard** or **x**: Switch to the <code>gpt-4o</code> model
+* **think super hard** or **e**: Switch to the following: each user message is first passed to the <code>o1-mini</code> model with a special prompt (telling it to create a plan to fulfill the request). This <code>o1-mini</code> message is then passed to the <code>gpt-4o</code> model with a special prompt telling it to follow the given plan.
 
 
 ## Conversation Example 
